@@ -1,8 +1,7 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
+import * as apiEndpoints from './endpoints'
 
 const token = 'demoToken12345'
-
-const exampleEndpoint = axios.create({ baseURL: '/example' })
 
 const requestInterceptor = (request: AxiosRequestConfig) => {
   request.headers.Authorization = `Bearer ${token}`
@@ -21,14 +20,12 @@ const responseErrorInterceptor = (error: AxiosError) => {
   return Promise.reject(error)
 }
 
-const apiEndpoints = [exampleEndpoint]
-
-apiEndpoints.forEach(e => {
-  e.interceptors.request.use(requestInterceptor)
-  e.interceptors.response.use(
+Object.values(apiEndpoints).forEach(endpoint => {
+  endpoint.interceptors.request.use(requestInterceptor)
+  endpoint.interceptors.response.use(
     responseSuccessInterceptor,
     responseErrorInterceptor
   )
 })
 
-export default { exampleEndpoint }
+export default apiEndpoints
