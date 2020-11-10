@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "coenraads.bracket-pair-colorizer",
+    "mikestead.dotenv",
+    "dsznajder.es7-react-js-snippets",
+    "dbaeumer.vscode-eslint",
+    "mkxml.vscode-filesize",
+    "ritwickdey.liveserver",
+    "davidanson.vscode-markdownlint",
+    "esbenp.prettier-vscode",
+    "syler.sass-indented",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "visualstudioexptteam.vscodeintellicode"
+  ]
+}
