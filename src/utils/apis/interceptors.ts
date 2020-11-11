@@ -1,10 +1,12 @@
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import * as apiEndpoints from './endpoints'
 
-const token = 'demoToken12345'
+const getToken = () => {
+  return 'token_demo_12345'
+}
 
 const requestInterceptor = (request: AxiosRequestConfig) => {
-  request.headers.Authorization = `Bearer ${token}`
+  request.headers.Authorization = `Bearer ${getToken()}`
   return request
 }
 
@@ -16,7 +18,6 @@ const responseSuccessInterceptor = (response: AxiosResponse) => {
 // Any status codes that falls outside the range of 2xx cause this function to trigger
 const responseErrorInterceptor = (error: AxiosError) => {
   // Do something with response error
-
   return Promise.reject(error)
 }
 
