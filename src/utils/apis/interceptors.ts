@@ -5,9 +5,9 @@ const getToken = () => {
   return 'token_demo_12345'
 }
 
-const requestInterceptor = (request: AxiosRequestConfig) => {
-  request.headers.Authorization = `Bearer ${getToken()}`
-  return request
+const requestInterceptor = (config: AxiosRequestConfig) => {
+  config.headers.Authorization = `Bearer ${getToken()}`
+  return config
 }
 
 const responseSuccessInterceptor = (response: AxiosResponse) => {
