@@ -16,17 +16,17 @@ export interface IPermission {
 
 export interface IUserDetailInfo {
   name?: string
-  accessToken?: string
-  email?: string
-  roles: string[]
-  permissions?: string[]
+  accessToken: string
+  email: string
+  roles: string[] | null
+  permissions: string[] | null
 }
 
 export interface IAuthProviderValue {
   user: IUserDetailInfo | null
-  signIn: (email: string, password: string) => void
-  signUp: (email: string, password: string) => void
-  signOut: () => void
-  sendPasswordResetEmail: (email: string) => void
-  confirmPasswordReset: (code: string, password: string) => void
+  signIn?: (email: string, password: string) => void
+  signUp?: (email: string, password: string) => void
+  signOut?: () => void | null
+  sendPasswordResetEmail?: (email: string) => void
+  confirmPasswordReset?: (code: string, password: string) => void
 }

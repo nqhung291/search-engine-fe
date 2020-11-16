@@ -1,5 +1,6 @@
 import { IAuthProviderValue, IRoute } from '@types'
 import React, { useContext, useState } from 'react'
+import { filterRoutesHasPermission } from 'utils/permissions'
 
 type AuthProviderProps = {
   children: React.ReactNode
@@ -34,8 +35,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
 // Hook for child components to get the auth object ...
 // ... and re-render when it changes.
-export const useAuth = () => {
+export const useAuth = (): IAuthProviderValue | null => {
   return useContext(AuthContext)
 }
-
-export const useAuthorizationRouter = (items: IRoute[]) => {}

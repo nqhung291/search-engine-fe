@@ -1,6 +1,6 @@
 import { IPermission, IRoute } from '@types'
 
-const permission = (
+export const permission = (
   app: IPermission['app'],
   resourceOrRole: IPermission['resourceOrRole'],
   action?: IPermission['action']
@@ -22,7 +22,7 @@ const checkPermissionExists = (
   )
 }
 
-const isRouteVisible = (
+const hasPermission = (
   route: IRoute,
   currentPermissions: string[]
 ): boolean => {
@@ -31,14 +31,26 @@ const isRouteVisible = (
   return !!permissions.find(p => checkPermissionExists(p, currentPermissions))
 }
 
-// const filterRoutes = (
-//   routes: IRoute[],
-//   currentPermissions: string[]
-// ): IRoute[] => {
-//   const res: IRoute[] = []
-//   routes.filter(route => {
-//     if (!route.children || route.children.length === 0) {
-//       return isRouteVisible(route, currentPermissions)
-//     }
-//   })
-// }
+export const filterRoutesHasPermission = (
+  routes: IRoute[],
+  currentPermissions: string[]
+): IRoute[] => {
+  const res: IRoute[] = []
+  if (!currentPermissions || !currentPermissions.length) {
+    return res
+  }
+  routes.forEach(route => {
+    const temp = { ...route }
+    if (hasPermission(temp, currentPermissions)) {
+      if (temp.children && temp.children.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        temp.children = filterRoutesHasPermission(
+          temp.children,
+          currentPermissions
+        )
+      }
+      res.push(temp)
+    }
+  })
+  return res
+}
