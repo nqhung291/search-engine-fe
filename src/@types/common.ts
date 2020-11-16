@@ -5,7 +5,7 @@ export interface IRoute {
   component: React.ElementType
   permissions?: IPermission[]
   icon?: React.ComponentType<{ className?: string }>
-  children?: string[]
+  children?: IRoute[]
 }
 
 export interface IPermission {
@@ -18,5 +18,15 @@ export interface IUserDetailInfo {
   name?: string
   accessToken?: string
   email?: string
-  authorities?: string[]
+  roles: string[]
+  permissions?: string[]
+}
+
+export interface IAuthProviderValue {
+  user: IUserDetailInfo | null
+  signIn: (email: string, password: string) => void
+  signUp: (email: string, password: string) => void
+  signOut: () => void
+  sendPasswordResetEmail: (email: string) => void
+  confirmPasswordReset: (code: string, password: string) => void
 }

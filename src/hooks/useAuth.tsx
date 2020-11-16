@@ -1,23 +1,24 @@
+import { IAuthProviderValue, IRoute } from '@types'
 import React, { useContext, useState } from 'react'
 
 type AuthProviderProps = {
   children: React.ReactNode
 }
 
-// TODO: replace any to another meaningful type
-export const AuthContext = React.createContext<any>(undefined)
+const AuthContext = React.createContext<IAuthProviderValue | null>(null)
 
 // Provider hook that creates auth object and handles state
 const useProviderAuth = () => {
   const [user, setUser] = useState(null)
 
-  const signIn = () => {}
-  const signUp = () => {}
+  const signIn = (email: string, password: string) => {}
+  const signUp = (email: string, password: string) => {}
   const signOut = () => {}
-  const sendPasswordResetEmail = () => {}
-  const confirmPasswordReset = () => {}
+  const sendPasswordResetEmail = (email: string) => {}
+  const confirmPasswordReset = (code: string, password: string) => {}
 
   return {
+    user,
     signIn,
     signUp,
     signOut,
@@ -36,3 +37,5 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 export const useAuth = () => {
   return useContext(AuthContext)
 }
+
+export const useAuthorizationRouter = (items: IRoute[]) => {}
