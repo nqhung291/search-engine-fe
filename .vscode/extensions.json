@@ -9,6 +9,7 @@
     "esbenp.prettier-vscode",
     "syler.sass-indented",
     "ms-vscode.vscode-typescript-tslint-plugin",
-    "visualstudioexptteam.vscodeintellicode"
+    "visualstudioexptteam.vscodeintellicode",
+    "wix.vscode-import-cost"
   ]
 }
