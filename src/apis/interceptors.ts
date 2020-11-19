@@ -1,5 +1,4 @@
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
-import * as apiEndpoints from './endpoints'
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 const getToken = () => {
   return 'token_demo_12345'
@@ -21,7 +20,11 @@ const responseErrorInterceptor = (error: AxiosError) => {
   return Promise.reject(error)
 }
 
-Object.values(apiEndpoints).forEach(endpoint => {
+const solrEndpoint = axios.create({ baseURL: '/solr', timeout: 10000 })
+
+const endpoints = [solrEndpoint]
+
+endpoints.forEach(endpoint => {
   endpoint.interceptors.request.use(requestInterceptor)
   endpoint.interceptors.response.use(
     responseSuccessInterceptor,
@@ -29,4 +32,4 @@ Object.values(apiEndpoints).forEach(endpoint => {
   )
 })
 
-export default apiEndpoints
+export { solrEndpoint }
