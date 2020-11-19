@@ -1,22 +1,9 @@
-export interface IRoute {
-  exact?: boolean
-  path: string
+export interface ITableData {
+  key: number
+  topic: string
   name: string
-  component: React.ElementType
-  permissions?: IPermission[]
-  icon?: React.ComponentType<{ className?: string }>
-  children?: string[]
+  content: string
 }
-
-export interface IPermission {
-  app: string
-  resourceOrRole: string
-  action?: string
-}
-
-export interface IUserDetailInfo {
-  name?: string
-  accessToken?: string
-  email?: string
-  authorities?: string[]
+export interface ISearchParams {
+  search: string
 }
