@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, Layout, Row, Table } from 'antd'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { getDemoSearchResult, getSearchResult } from 'apis/solr'
+import { getDemoSearchResult } from 'apis/solr'
 import { ISearchParams, ITableData } from '@types'
 
 const columns = [
