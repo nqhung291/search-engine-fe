@@ -1,6 +1,5 @@
 import { IRoute } from '@types'
-import testRoutes from './testRoutes'
 
-const routes: Array<IRoute> = [...testRoutes]
+const routes: Array<IRoute> = []
 
 export default routes

@@ -1,17 +1,20 @@
-import AppLayout from 'layouts/AppLayout'
-import PrivateRoute from 'layouts/PrivateRoute'
-import React from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import React, { Suspense } from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import 'App.css'
+
+const Home = React.lazy(() => import('pages/Home'))
 
 const App: React.FC = () => {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/403" name="403" />
-        <Route exact path="/404" name="404" />
-        <PrivateRoute path="/" name="Layout" component={AppLayout} />
-      </Switch>
-    </BrowserRouter>
+    <Router>
+      <Suspense fallback={<div>Loading</div>}>
+        <Switch>
+          <Route exact path="/403" name="403" />
+          <Route exact path="/404" name="404" />
+          <Route path="/" name="Home" component={Home} />
+        </Switch>
+      </Suspense>
+    </Router>
   )
 }
 
