@@ -3,6 +3,7 @@ export interface ITableData {
   topic: string
   title: string
   content?: string
+  id: string
 }
 
 export interface ISolrResponse {

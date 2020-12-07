@@ -1,8 +1,8 @@
 import { Button, Col, Form, Input, Layout, Row, Table, Select } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { getSearchResult } from 'apis/solr'
-import { IFormValue, ISearchParams, ITableData } from '@types'
+import { IFormValue, ISearchParams, ISolrResponse } from '@types'
 import { titleCategories } from 'constants/index'
 import { buildQueryParams } from 'utils'
 
@@ -10,7 +10,14 @@ const columns = [
   {
     title: 'Tên bài báo',
     dataIndex: 'title',
-    key: 'title'
+    key: 'title',
+    render: (text: any, record: any) => {
+      return (
+        <a target="_blank" rel="noreferrer" href={record.url}>
+          {text}
+        </a>
+      )
+    }
   },
   {
     title: 'Chủ đề',
@@ -32,16 +39,31 @@ const StyledLayout: React.FC = styled(Layout)`
 
 const Home: React.FC = () => {
   const [form] = Form.useForm()
-  const [data, setData] = useState<ITableData[]>([])
+  const [page, setPage] = useState<number>(1)
+  const [queryParams, setQueryParams] = useState<string>('*:*')
+  const [pageSize, setPageSize] = useState<number | undefined>(10)
+  const [data, setData] = useState<ISolrResponse['response']>()
 
   const onFinish = (values: IFormValue) => {
+    setQueryParams(buildQueryParams(values))
+  }
+
+  const handlePageChange = (page: number, pageSize: number | undefined) => {
+    setPage(page)
+    setPageSize(pageSize)
+  }
+
+  useEffect(() => {
     const params: ISearchParams = {
-      q: buildQueryParams(values)
+      q: queryParams,
+      fl: 'id,topic,title,content,url',
+      start: (page - 1) * (pageSize ? pageSize : 10),
+      rows: pageSize
     }
     getSearchResult(params).then(res => {
-      setData(res.response.docs)
+      setData(res.response)
     })
-  }
+  }, [queryParams, page, pageSize])
 
   return (
     <StyledLayout>
@@ -50,7 +72,7 @@ const Home: React.FC = () => {
           <Form name="search-form" form={form} onFinish={onFinish}>
             <Row gutter={16}>
               <Col span="6">
-                <Form.Item name="title">
+                <Form.Item name="topic">
                   <Select size="large" placeholder="Tất cả" allowClear>
                     {titleCategories.map((e: string) => (
                       <Select.Option key={e} value={e}>
@@ -77,13 +99,18 @@ const Home: React.FC = () => {
       <Row justify="center">
         <Col span="16">
           <Table
+            rowKey="id"
             bordered
-            dataSource={data}
+            dataSource={data?.docs}
             columns={columns}
             pagination={{
+              current: page,
+              pageSize: pageSize,
+              total: data?.numFound,
               position: ['bottomRight'],
-              pageSizeOptions: ['5', '10', '15'],
-              showSizeChanger: true
+              pageSizeOptions: ['10', '15', '20'],
+              showSizeChanger: true,
+              onChange: handlePageChange
             }}
           />
         </Col>
