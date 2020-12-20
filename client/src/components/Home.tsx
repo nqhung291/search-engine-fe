@@ -83,7 +83,6 @@ const Home: React.FC = () => {
                   <Select
                     size="large"
                     placeholder="Chọn core"
-                    allowClear
                     defaultValue={1}
                     onChange={(value: number) => setCore(value)}
                   >
@@ -104,7 +103,7 @@ const Home: React.FC = () => {
                 </Form.Item>
               </Col>
               <Col span="12">
-                <Form.Item name="content">
+                <Form.Item name="search">
                   <Input size="large" placeholder="Enter search here" />
                 </Form.Item>
               </Col>

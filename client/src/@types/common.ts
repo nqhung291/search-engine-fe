@@ -22,6 +22,6 @@ export interface ISearchParams {
   rows?: number
 }
 export interface IFormValue {
-  title: string
-  content: string
+  topic: string
+  search: string
 }
