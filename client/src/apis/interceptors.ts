@@ -15,12 +15,17 @@ const responseErrorInterceptor = (error: AxiosError) => {
   return Promise.reject(error)
 }
 
-const solrEndpoint = axios.create({
-  baseURL: `${process.env.REACT_APP_SOLR_API}/news/`,
+const solrDefaultEndpoint = axios.create({
+  baseURL: `${process.env.REACT_APP_SOLR_API}/news-default/`,
   timeout: 10000
 })
 
-const endpoints = [solrEndpoint]
+const solrVietnameseEndpoint = axios.create({
+  baseURL: `${process.env.REACT_APP_SOLR_API}/news-vi/`,
+  timeout: 10000
+})
+
+const endpoints = [solrDefaultEndpoint]
 
 endpoints.forEach(endpoint => {
   endpoint.interceptors.request.use(requestInterceptor)
@@ -30,4 +35,4 @@ endpoints.forEach(endpoint => {
   )
 })
 
-export { solrEndpoint }
+export { solrDefaultEndpoint, solrVietnameseEndpoint }

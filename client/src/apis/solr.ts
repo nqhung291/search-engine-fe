@@ -1,9 +1,16 @@
 import { ISearchParams, ISolrResponse } from '@types'
-import { solrEndpoint } from 'apis/interceptors'
+import { solrDefaultEndpoint, solrVietnameseEndpoint } from 'apis/interceptors'
 
-export const getSearchResult = async (
+export const getDefaultSearchResult = async (
   params: ISearchParams
 ): Promise<ISolrResponse> => {
-  const response = await solrEndpoint.get('/select', { params })
+  const response = await solrDefaultEndpoint.get('/select', { params })
+  return response.data
+}
+
+export const getVietnameseSearchResult = async (
+  params: ISearchParams
+): Promise<ISolrResponse> => {
+  const response = await solrVietnameseEndpoint.get('/select', { params })
   return response.data
 }

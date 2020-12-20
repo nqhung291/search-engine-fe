@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, Layout, Row, Table, Select } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { getSearchResult } from 'apis/solr'
+import { getDefaultSearchResult, getVietnameseSearchResult } from 'apis/solr'
 import { IFormValue, ISearchParams, ISolrResponse } from '@types'
 import { titleCategories } from 'constants/index'
 import { buildQueryParams } from 'utils'
@@ -42,6 +42,7 @@ const Home: React.FC = () => {
   const [page, setPage] = useState<number>(1)
   const [queryParams, setQueryParams] = useState<string>('*:*')
   const [pageSize, setPageSize] = useState<number | undefined>(10)
+  const [core, setCore] = useState<number>(1)
   const [data, setData] = useState<ISolrResponse['response']>()
 
   const onFinish = (values: IFormValue) => {
@@ -56,14 +57,20 @@ const Home: React.FC = () => {
   useEffect(() => {
     const params: ISearchParams = {
       q: queryParams,
-      fl: 'id,topic,title,content,url',
+      fl: 'id,topic,title,content,url,score',
       start: (page - 1) * (pageSize ? pageSize : 10),
       rows: pageSize
     }
-    getSearchResult(params).then(res => {
-      setData(res.response)
-    })
-  }, [queryParams, page, pageSize])
+    if (core === 1) {
+      getDefaultSearchResult(params).then(res => {
+        setData(res.response)
+      })
+    } else {
+      getVietnameseSearchResult(params).then(res => {
+        setData(res.response)
+      })
+    }
+  }, [queryParams, page, pageSize, core])
 
   return (
     <StyledLayout>
@@ -71,6 +78,20 @@ const Home: React.FC = () => {
         <Col span="16">
           <Form name="search-form" form={form} onFinish={onFinish}>
             <Row gutter={16}>
+              <Col span={6}>
+                <Form.Item>
+                  <Select
+                    size="large"
+                    placeholder="Chọn core"
+                    allowClear
+                    defaultValue={1}
+                    onChange={(value: number) => setCore(value)}
+                  >
+                    <Select.Option value={1}>Search mặc định</Select.Option>
+                    <Select.Option value={2}>Search Tiếng Việt</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
               <Col span="6">
                 <Form.Item name="topic">
                   <Select size="large" placeholder="Tất cả" allowClear>
@@ -82,7 +103,7 @@ const Home: React.FC = () => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span="18">
+              <Col span="12">
                 <Form.Item name="content">
                   <Input size="large" placeholder="Enter search here" />
                 </Form.Item>
