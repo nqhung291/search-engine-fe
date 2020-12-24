@@ -5,12 +5,13 @@ export const buildQueryParams = (formValues: IFormValue) => {
   if (formValues.topic) {
     searchQuery.push(`topic:${formValues.topic}^2`)
   }
-  if (formValues.search && formValues.search.trim() !== '') {
+  const query = formValues.search?.trim()
+  if (query && query !== '') {
     searchQuery.push(`(
-      title:${formValues.search} or 
-      title:"${formValues.search}"^1.5 or 
-      content:${formValues.search} or
-      content:"${formValues.search}"^1.5)`)
+      title:${query} or 
+      title:"${query}"^1.5 or 
+      content:${query} or
+      content:"${query}"^1.5)`)
   }
   if (searchQuery.length > 0) return searchQuery.join('and')
   return '*:*'
