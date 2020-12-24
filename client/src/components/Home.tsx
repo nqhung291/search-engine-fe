@@ -54,6 +54,21 @@ const Home: React.FC = () => {
     setPageSize(pageSize)
   }
 
+  const onKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      event.stopPropagation()
+      onFinish(form.getFieldsValue())
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [])
+
   useEffect(() => {
     const params: ISearchParams = {
       q: queryParams,
