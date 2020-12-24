@@ -1,4 +1,14 @@
-import { Button, Col, Form, Input, Layout, Row, Table, Select } from 'antd'
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Layout,
+  Row,
+  Table,
+  Select,
+  Spin
+} from 'antd'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { getDefaultSearchResult, getVietnameseSearchResult } from 'apis/solr'
@@ -36,6 +46,10 @@ const StyledLayout: React.FC = styled(Layout)`
   padding-top: 40px !important;
   min-height: 100vh;
 `
+const StyledSpinner: React.FC = styled(Spin)`
+  display: flex;
+  justify-content: center;
+`
 
 const Home: React.FC = () => {
   const [form] = Form.useForm()
@@ -44,6 +58,7 @@ const Home: React.FC = () => {
   const [pageSize, setPageSize] = useState<number | undefined>(10)
   const [core, setCore] = useState<number>(1)
   const [data, setData] = useState<ISolrResponse['response']>()
+  const [loading, setLoading] = useState(false)
 
   const onFinish = (values: IFormValue) => {
     setQueryParams(buildQueryParams(values))
@@ -76,13 +91,16 @@ const Home: React.FC = () => {
       start: (page - 1) * (pageSize ? pageSize : 10),
       rows: pageSize
     }
+    setLoading(true)
     if (core === 1) {
       getDefaultSearchResult(params).then(res => {
         setData(res.response)
+        setLoading(false)
       })
     } else {
       getVietnameseSearchResult(params).then(res => {
         setData(res.response)
+        setLoading(false)
       })
     }
   }, [queryParams, page, pageSize, core])
@@ -133,21 +151,25 @@ const Home: React.FC = () => {
       </Row>
       <Row justify="center">
         <Col span="16">
-          <Table
-            rowKey="id"
-            bordered
-            dataSource={data?.docs}
-            columns={columns}
-            pagination={{
-              current: page,
-              pageSize: pageSize,
-              total: data?.numFound,
-              position: ['bottomRight'],
-              pageSizeOptions: ['10', '15', '20'],
-              showSizeChanger: true,
-              onChange: handlePageChange
-            }}
-          />
+          {loading ? (
+            <StyledSpinner />
+          ) : (
+            <Table
+              rowKey="id"
+              bordered
+              dataSource={data?.docs}
+              columns={columns}
+              pagination={{
+                current: page,
+                pageSize: pageSize,
+                total: data?.numFound,
+                position: ['bottomRight'],
+                pageSizeOptions: ['10', '15', '20'],
+                showSizeChanger: true,
+                onChange: handlePageChange
+              }}
+            />
+          )}
         </Col>
       </Row>
     </StyledLayout>
