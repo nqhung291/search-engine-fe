@@ -9,9 +9,9 @@ export const buildQueryParams = (formValues: IFormValue) => {
   if (query && query !== '') {
     searchQuery.push(`(
       title:${query} or 
-      title:"${query}"^1.5 or 
+      title:"${query}" or 
       content:${query} or
-      content:"${query}"^1.5)`)
+      content:"${query}")`)
   }
   if (searchQuery.length > 0) return searchQuery.join('and')
   return '*:*'
